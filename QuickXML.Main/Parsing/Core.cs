@@ -46,49 +46,52 @@ namespace QuickXML.Main.Parsing
             }
         }
 
-        /// <summary>
-        /// Parse an xml string. 
-        /// </summary>
-        /// <param name="xmlString"></param>
-        /// <returns></returns>
-        public IEnumerator<ParserToken> ParseString(ref string xmlString)
-            => InternalParse(xmlString.AsSpan());
+        // /// <summary>
+        // /// Parse an xml string. 
+        // /// </summary>
+        // /// <param name="xmlString"></param>
+        // /// <returns></returns>
+        // public IEnumerator<ParserToken> ParseString(ref string xmlString)
+        //     => InternalParse(xmlString.AsSpan());
 
-        IEnumerator<ParserToken> InternalParse(ReadOnlySpan<char> _xmlspan)
-        {
-            var _stState = ParserStateMachineState.StartParse;
+        // IEnumerator<ParserToken> InternalParse(ref ReadOnlySpan<char> _xmlspan)
+        // {
+        //     var _stState = ParserStateMachineState.StartParse;
 
-            for (int i = 0; i < _xmlspan.Length; i++)
-            {
-                var target = _xmlspan[i];
-                int savedIndex, savedLength;
-                bool isEndTag = false;
-
-
-                if (!Helpers.IsValidXMLChar(ref target))
-                    throw new XmlInvalidCharException($"Invalid XML Character at {_xmlspan.Length}");
-
-                switch (target)
-                {
-                    case _TagCharStart:
-                        savedIndex = i;
-
-                        break;
-
-                    case _endTagIndChar:
+        //     for (int i = 0; i < _xmlspan.Length; i++)
+        //     {
+        //         var target = _xmlspan[i];
+        //         int savedIndex, savedLength;
+        //         bool isEndTag = false;
 
 
-                        break;
+        //         if (!Helpers.IsValidXMLChar(ref target))
+        //             throw new XmlInvalidCharException($"Invalid XML Character at {_xmlspan.Length}");
 
-                    case _TagCharEnd:
+        //         switch (target)
+        //         {
+        //             case _TagCharStart:
+        //                 savedIndex = i;
 
-                        break;
+        //                 break;
 
-                    default:
+        //             case _endTagIndChar:
 
-                        break;
-                }
-            }
-        }
+
+        //                 break;
+
+        //             case _TagCharEnd:
+
+        //                 break;
+
+        //             default:
+
+        //                 break;
+        //         }
+
+        //         yield return new ParserToken(); // TODO: Placeholder yield return; MUST CHANGE THIS AFTER 
+        //                                         //       Proper impl of the parsing state machine.
+        //     }
+        // }
     }
 }

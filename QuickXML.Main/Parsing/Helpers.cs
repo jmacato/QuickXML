@@ -4,7 +4,7 @@ namespace QuickXML.Main.Parsing
 {
     public class Helpers
     {
-        readonly static (char startRange, char endRange)[] validCharRanges = new(char, char)[]
+        readonly static (char, char)[] validCharRanges = new(char, char)[]
         {
             ('\x9','\xA'),
             ('\xD','\xD'),
@@ -14,7 +14,7 @@ namespace QuickXML.Main.Parsing
                                       // But i'll keep this for reference's sake.
         };
 
-        readonly static (char startRange, char endRange)[] validWhitespaceRanges = new(char, char)[]
+        readonly static (char, char)[] validWhitespaceRanges = new(char, char)[]
         {
             ('\x9','\xA'),
             ('\xD','\xD'),
@@ -44,15 +44,10 @@ namespace QuickXML.Main.Parsing
 
         private static bool validateCharRange(ref ReadOnlySpan<(char start, char end)> charRanges, ref char target)
         {
-            for (int i = 0; i < charRanges.Length; i++)
-            {
-                var validRange = charRanges[i];
+            foreach (var validRange in charRanges)
                 if (target >= validRange.start & target <= validRange.end)
-                    break;
-                else
-                    return false;
-            }
-            return true;
+                    return true;
+            return false;
         }
     }
 }
