@@ -687,11 +687,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/jmacato/Desktop/QuickXML/QuickXML.csproj",
+      "projectUniqueName": "/home/jmacato/Desktop/QuickXML/QuickXML.Main/QuickXML.csproj",
       "projectName": "QuickXML",
-      "projectPath": "/home/jmacato/Desktop/QuickXML/QuickXML.csproj",
+      "projectPath": "/home/jmacato/Desktop/QuickXML/QuickXML.Main/QuickXML.csproj",
       "packagesPath": "/home/jmacato/.nuget/packages/",
-      "outputPath": "/home/jmacato/Desktop/QuickXML/obj/",
+      "outputPath": "/home/jmacato/Desktop/QuickXML/QuickXML.Main/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/share/dotnet/sdk/NuGetFallbackFolder"
