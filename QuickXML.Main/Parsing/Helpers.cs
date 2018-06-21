@@ -26,23 +26,18 @@ namespace QuickXML.Main.Parsing
         /// character definition.
         /// </summary>
         public static bool IsValidXMLChar(ref char target)
-        {
-            var range = (ReadOnlySpan<(char, char)>)validCharRanges;
-
-            return validateCharRange(ref range, ref target);
-        }
+            => validateCharRange(validCharRanges, ref target);
 
         /// <summary>
         /// Validates a char if it's a XML known whitespace
         /// </summary>
         public static bool IsWhitespaceXMLChar(ref char target)
-        {
-            var range = (ReadOnlySpan<(char, char)>)validWhitespaceRanges;
+            => validateCharRange(validWhitespaceRanges, ref target);
 
-            return validateCharRange(ref range, ref target);
-        }
-
-        private static bool validateCharRange(ref ReadOnlySpan<(char start, char end)> charRanges, ref char target)
+        /// <summary>
+        /// Core validation function
+        /// </summary>
+        private static bool validateCharRange(ReadOnlySpan<(char start, char end)> charRanges, ref char target)
         {
             foreach (var validRange in charRanges)
                 if (target >= validRange.start & target <= validRange.end)
