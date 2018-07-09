@@ -137,7 +137,7 @@ namespace QuickXML
                         // Stop if the next char is a whitespace or the end tag
                         if (Helpers.IsValidWhitespaceXMLChar(ref target))
                         {
-
+                            break;
                         }
                         else if (target == _TagEndIndChar)
                         {
