@@ -1,6 +1,7 @@
 using System;
 using Xunit;
 using QuickXML.Main;
+using Helpers = QuickXML.Helpers;
 
 namespace QuickXML.Tests
 {
@@ -13,7 +14,7 @@ namespace QuickXML.Tests
         [InlineData((char)0xFFFF, false)]
         public void Check_If_ValidChar(ref char target, bool expectedResult)
         {
-            Assert.Equal(QuickXML.Main.Parsing.Helpers.IsValidXMLChar(ref target), expectedResult);
+            Assert.Equal(Helpers.IsValidXMLChar(ref target), expectedResult);
         }
 
         [Theory]
@@ -24,7 +25,33 @@ namespace QuickXML.Tests
         [InlineData('\n', true)]
         public void Check_If_Valid_Whitespace_Char(ref char target, bool expectedResult)
         {
-            Assert.Equal(QuickXML.Main.Parsing.Helpers.IsWhitespaceXMLChar(ref target), expectedResult);
+            Assert.Equal(Helpers.IsValidWhitespaceXMLChar(ref target), expectedResult);
+        }
+
+        [Theory]
+        [InlineData('A', true)]
+        [InlineData('a', true)]
+        [InlineData('1', false)]
+        [InlineData(' ', false)]
+        [InlineData('.', false)]
+        [InlineData('\t', false)]
+        [InlineData('\n', false)]
+        public void Check_If_Valid_NameStart_Char(ref char target, bool expectedResult)
+        {
+            Assert.Equal(Helpers.IsValidNameStartXMLChar(ref target), expectedResult);
+        }
+        
+        [Theory]
+        [InlineData('A', true)]
+        [InlineData('a', true)]
+        [InlineData('1', true)]
+        [InlineData(' ', false)]
+        [InlineData('.', true)]
+        [InlineData('\t', false)]
+        [InlineData('\n', false)]
+        public void Check_If_Valid_Name_Char(ref char target, bool expectedResult)
+        {
+            Assert.Equal(Helpers.IsValidNameXMLChar(ref target), expectedResult);
         }
     }
 }

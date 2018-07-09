@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace QuickXML.Main.Parsing
+namespace QuickXML
 {
     [Serializable]
     internal class XmlInvalidCharException : Exception
