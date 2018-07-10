@@ -40,14 +40,14 @@ namespace QuickXML
 
         readonly static (char, char)[] valid_NameChar_Ranges = new(char, char)[]
         {
-            (':',':'),
-            ('A','Z'),
+            ('A','Z'),     
+            ('0', '9'),
             ('a', 'z'),
-            ('_', '_'),
-
             ('-', '-'),
             ('.', '.'),
-            ('0', '9'),
+            ('_', '_'),
+            (':',':'),
+
             ('\xB7', '\xB7'),
             ('\x0300', '\x036F'),
             ('\x203F', '\x2040'),

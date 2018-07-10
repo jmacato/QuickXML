@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace QuickXML
@@ -25,7 +26,8 @@ namespace QuickXML
             StartValue,
             EndValue,
             IgnoreUntilCharEndTag,
-            InBetweenTag
+            InBetweenTag,
+            ExpectAttributesOrEndCharTag
         }
 
         public enum ParserTokenType
@@ -40,19 +42,25 @@ namespace QuickXML
             EscapedChar,
             TagEmptyInd,
             TagEndIgnoredTag,
+            TextContent,
+            AttributeName,
         }
 
+        [DebuggerStepThrough]
         public struct ParserToken
         {
-            public ParserTokenType type { get; private set; }
-            public int startIndex { get; private set; }
-            public int endIndex { get; private set; }
+            public ParserTokenType type;
+            public int startIndex;
+            public int endIndex;
+            //public ReadOnlyMemory<char> text;
 
-            public ParserToken(ParserTokenType type, int startIndex, int endIndex)
+            [DebuggerStepThrough]
+            public ParserToken(ReadOnlyMemory<char> _xmlspan, ParserTokenType type, int startIndex, int endIndex)
             {
                 this.type = type;
                 this.startIndex = startIndex;
                 this.endIndex = endIndex;
+                // this.text = _xmlspan.Slice(startIndex, (endIndex - startIndex) + 1);
             }
         }
 
@@ -61,21 +69,36 @@ namespace QuickXML
         /// </summary>
         /// <param name="xmlString"></param>
         /// <returns></returns> 
-        public List<ParserToken> ParseString(ReadOnlyMemory<char> _xmlspan)
+        public List<ParserToken> ParseString(ref string xmlspan)
         {
+            var _xmlspan = xmlspan.AsMemory();
             List<ParserToken> result = new List<ParserToken>();
-            var _stState = ParserState.StartParse;
-            int nameStartIndex = 0, nameEndIndex = 0; 
-            bool currentlyInTag = false; 
-            int savedIndex = 0, savedLength = 0;
 
-            
+            var _stState = ParserState.StartParse;
+
+            int nameStartIndex = 0,
+                nameEndIndex = 0,
+                textStartIndex = 0,
+                textEndIndex = 0;
+
+            bool currentlyInTag = false,
+                 nextNamesAreAttributes = false,
+                 getAttributeName = false,
+                 bool23 = false,
+                 startTextContent = false
+                 ;
+
+            int savedIndex = 0,
+                savedLength = 0;
+
+
             for (int i = 0; i < _xmlspan.Length; i++)
             {
                 var target = _xmlspan.Span[i];
 
                 if (!Helpers.IsValidXMLChar(ref target))
                     throw new XmlInvalidCharException($"Invalid XML Character at {_xmlspan.Length}");
+
                 loop1:
                 switch (_stState)
                 {
@@ -85,13 +108,18 @@ namespace QuickXML
                         {
                             case _TagCharStart:
 
+                                if (!currentlyInTag)
+                                {
+                                    if (textStartIndex < textEndIndex) { }
+                                    result.Add(new ParserToken(_xmlspan, ParserTokenType.TextContent, textStartIndex, textEndIndex));
+                                }
+
                                 _stState = ParserState.CharStartTagName;
 
-                                result.Add(new ParserToken(ParserTokenType.TagDeclStart, i, i));
+                                result.Add(new ParserToken(_xmlspan, ParserTokenType.TagDeclStart, i, i));
                                 break;
 
                             case _TagCharEnd:
-
                                 if (currentlyInTag)
                                 {
                                     _stState = ParserState.CharEndTag;
@@ -100,9 +128,26 @@ namespace QuickXML
                                 else
                                     throw new XmlParsingFailedException(_xmlspan, i);
 
+                            default:
+                                if (Helpers.IsValidWhitespaceXMLChar(ref target) | Helpers.IsValidXMLChar(ref target))
+                                {
+                                    if (!currentlyInTag)
+                                    {
+                                        if (startTextContent)
+                                        {
+                                            textStartIndex = i;
+                                            startTextContent = false;
+                                        }
+                                        textEndIndex = i;
+                                    }
+                                    break;
+                                }
+                                else
+                                    throw new XmlParsingFailedException(_xmlspan, i);
                         }
 
                         break;
+
 
                     case ParserState.CharStartTagName:
 
@@ -111,12 +156,14 @@ namespace QuickXML
                         // If the name starts with ? or !, ignore it for now.
                         if (target == '?' | target == '!')
                         {
+
                             _stState = ParserState.IgnoreUntilCharEndTag;
                             break;
                         }
                         else if (target == _TagEndIndChar)
                         {
-                            result.Add(new ParserToken(ParserTokenType.TagEndNodeInd, i, i));
+                            result.Add(new ParserToken(_xmlspan, ParserTokenType.TagEndNodeInd, i, i));
+                            savedIndex++;
                         }
                         else
                         {
@@ -127,44 +174,74 @@ namespace QuickXML
 
                         // Save the name index, dont do any string copying for now.
                         _stState = ParserState.GetName;
-                        nameStartIndex = i;
+                        nameStartIndex = savedIndex;
+                        nameEndIndex = nameStartIndex;
                         currentlyInTag = true;
                         break;
 
                     case ParserState.GetName:
 
+                        bool validNameXMLChar = false;
+
+                        if (Helpers.IsValidNameXMLChar(ref target))
+                        {
+                            nameEndIndex = i;
+                            validNameXMLChar = true;
+                        }
 
                         // Stop if the next char is a whitespace or the end tag
                         if (Helpers.IsValidWhitespaceXMLChar(ref target))
                         {
+                            if (!nextNamesAreAttributes)
+                            {
+                                result.Add(new ParserToken(_xmlspan, ParserTokenType.TagName, nameStartIndex, nameEndIndex));
+                                nextNamesAreAttributes = true;
+                            }
+                            else if (getAttributeName)
+                            {
+                                result.Add(new ParserToken(_xmlspan, ParserTokenType.AttributeName, nameStartIndex, nameEndIndex));
+                                getAttributeName = false;
+                            }
+
+
                             break;
                         }
                         else if (target == _TagEndIndChar)
                         {
-                            result.Add(new ParserToken(ParserTokenType.TagEmptyInd, i, i));
+                            result.Add(new ParserToken(_xmlspan, ParserTokenType.TagEmptyInd, i, i));
+                            nextNamesAreAttributes = false;
+
                             break;
                         }
                         else if (target == _TagCharEnd)
                         {
                             _stState = ParserState.CharEndTag;
-                            result.Add(new ParserToken(ParserTokenType.TagName, nameStartIndex, nameEndIndex));
+                            result.Add(new ParserToken(_xmlspan, ParserTokenType.TagName, nameStartIndex, nameEndIndex));
+                            nextNamesAreAttributes = false;
                             goto loop1;
                         }
+
                         else
                         {
                             // Throw if it's not a valid name char.
-                            if (!Helpers.IsValidNameXMLChar(ref target))
+                            if (!validNameXMLChar)
                                 throw new XmlParsingFailedException(_xmlspan, i);
+
+                            if (nextNamesAreAttributes && !getAttributeName)
+                            {
+                                nameStartIndex = i;
+                                getAttributeName = true;
+                            }
+
                         }
 
-                        nameEndIndex = i;
                         break;
 
                     case ParserState.EndName:
 
                         _stState = ParserState.StartParse;
 
-                        result.Add(new ParserToken(ParserTokenType.TagName, nameStartIndex, nameEndIndex));
+                        result.Add(new ParserToken(_xmlspan, ParserTokenType.TagName, nameStartIndex, nameEndIndex));
 
                         break;
 
@@ -173,14 +250,15 @@ namespace QuickXML
                         if (target == _TagCharEnd)
                         {
                             _stState = ParserState.StartParse;
-                            result.Add(new ParserToken(ParserTokenType.TagEndIgnoredTag, nameStartIndex, nameEndIndex));
+                            result.Add(new ParserToken(_xmlspan, ParserTokenType.TagEndIgnoredTag, nameStartIndex, nameEndIndex));
                         }
                         break;
 
                     case ParserState.CharEndTag:
-                        result.Add(new ParserToken(ParserTokenType.TagDeclEnd, i, i));
+                        result.Add(new ParserToken(_xmlspan, ParserTokenType.TagDeclEnd, i, i));
                         _stState = ParserState.StartParse;
                         currentlyInTag = false;
+                        startTextContent = true;
                         break;
 
                     default:
@@ -190,6 +268,37 @@ namespace QuickXML
             }
 
             return result;
+
+        }
+
+
+        public void PlainStringRead(ref string xmlspan)
+        {
+            var _xmlspan = xmlspan.AsMemory();
+            List<ParserToken> result = new List<ParserToken>();
+
+            var _stState = ParserState.StartParse;
+
+            int nameStartIndex = 0,
+                nameEndIndex = 0,
+                textStartIndex = 0,
+                textEndIndex = 0;
+
+            bool currentlyInTag = false,
+                 nextNamesAreAttributes = false,
+                 getAttributeName = false,
+                 bool23 = false,
+                 startTextContent = false
+                 ;
+
+            int savedIndex = 0,
+                savedLength = 0;
+
+
+            for (int i = 0; i < _xmlspan.Length; i++)
+            {
+                var target = _xmlspan.Span[i];
+            }
 
         }
     }
