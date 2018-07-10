@@ -1,1 +1,890 @@
-<g><sdfsdff>sadsafdsf</sdfsdff></g>
+<html>
+	<head>
+		<title>xmllint(1): XML tool - Linux man page</title>
+		<base/>
+		<link/>
+		<link/>
+		<link/>
+		<meta/>
+		<meta/>
+		<script/>
+	</head>
+	<body>
+		<div>
+			<div>
+				<a>
+					<img/>
+				</a>
+			</div>
+			<div>
+
+				<br/>
+				<h1>xmllint(1) - Linux man page</h1>
+
+				<h2>Name</h2>
+
+				<p>
+					xmllint - command line XML tool
+				</p>
+				<h2>Synopsis</h2>
+				<div>
+					<script/>
+					<ins/>
+					<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+
+
+				<p>
+					<b>xmllint</b>
+					[
+					<b>--version --debug --shell --debugent --copy --recover --noent --noout --nonet --path "</b>
+					<i>
+						<b>PATH</b>
+						(S)
+					</i>
+					<b>
+						" --load-trace --htmlout
+						--nowrap --valid --postvalid --dtdvalid
+					</b>
+					<i>URL</i>
+					<b>--dtdvalidfpi</b>
+					<i>FPI</i>
+					<b>--timing --output</b>
+					<i>FILE</i>
+					<b>
+						--repeat --insert --compress
+						--html --xmlout --push --memory --maxmem
+					</b>
+					<i>NBBYTES</i>
+					<b>--nowarning --noblanks --nocdata --format --encode</b>
+					<i>ENCODING</i>
+					<b>
+						--dropdtd --nsclean
+						--testIO --catalogs --nocatalogs --auto --xinclude --noxincludenode --loaddtd --dtdattr --stream --walker --pattern
+					</b>
+					<i>PATTERNVALUE</i>
+					<b>
+						--chkregister
+						--relaxng
+					</b>
+					<i>SCHEMA</i>
+					<b>--schema</b>
+					<i>SCHEMA</i>
+					<b>--c14n</b>
+					] {
+					<i>
+						<b>XML-FILE</b>
+						(S)
+					</i>
+					... -}
+				</p>
+				<dl>
+					<dt>
+						<b>xmllint --help</b>
+					</dt>
+				</dl>
+				<h2>Description</h2>
+
+				<p>
+					The
+					<b>xmllint</b>
+					program parses one or more XML files, specified on the command line as
+					<i>XML-FILE</i>
+					(or the standard input if the filename provided is
+					<b>-</b>
+					). It prints various types of output, depending upon the options selected. It is useful for detecting errors both in XML code and in the XML parser
+					itself.
+				</p>
+				<p>
+					<b>xmllint</b>
+					is included in
+					<b>
+						<a>libxml</a>
+					</b>
+					(3).
+				</p>
+				<h2>Options</h2>
+
+				<p>
+					<b>xmllint</b>
+					accepts the following options (in alphabetical order):
+				</p>
+				<dl>
+					<dt>
+						<b>--auto</b>
+
+						<p>
+							Generate a small document for testing purposes.
+						</p>
+						<dt>
+							<b>--catalogs</b>
+						</dt>
+					</dt>
+					<dd>
+						Use the SGML
+						<b>catalog</b>
+						(s) from
+						<b>SGML_CATALOG_FILES</b>
+						. Otherwise XML catalogs starting from
+						<i>/etc/xml/catalog</i>
+						are used by default.
+					</dd>
+					<dt>
+						<b>--chkregister</b>
+					</dt>
+					<dd>
+						Turn on node registration. Useful for developers testing
+						<b>
+							<a>libxml</a>
+						</b>
+						(3) node tracking code.
+					</dd>
+					<dt>
+						<b>--compress</b>
+					</dt>
+					<dd>
+						Turn on
+						<b>
+							<a>gzip</a>
+						</b>
+						(1) compression of output.
+					</dd>
+					<dt>
+						<b>--copy</b>
+
+						<p>
+							Test the internal copy implementation.
+
+						</p>
+						<p>
+							<b>--c14n</b>
+
+						</p>
+						<p>
+							Use the W3C XML Canonicalisation (C14N) to serialize the result of parsing to
+							<i>stdout</i>
+							. It keeps comments in the result.
+						</p>
+						<dt>
+							<b>--dtdvalid</b>
+							<i>URL</i>
+						</dt>
+					</dt>
+					<dd>
+						Use the DTD specified by an
+						<i>URL</i>
+						for validation.
+					</dd>
+					<dt>
+						<b>--dtdvalidfpi</b>
+						<i>FPI</i>
+					</dt>
+					<dd>
+						Use the DTD specified by a Formal Public Identifier
+						<i>FPI</i>
+						for validation, note that this will require a catalog exporting that Formal Public Identifier
+						to work.
+					</dd>
+					<dt>
+						<b>--debug</b>
+					</dt>
+					<dd>
+						Parse a file and output an annotated tree of the in-memory version of the document.
+					</dd>
+					<dt>
+						<b>--debugent</b>
+					</dt>
+					<dd>
+						Debug the entities defined in the document.
+					</dd>
+					<dt>
+						<b>--dropdtd</b>
+					</dt>
+					<dd>
+						Remove DTD from output.
+					</dd>
+					<dt>
+						<b>--dtdattr</b>
+					</dt>
+					<dd>
+						Fetch external DTD and populate the tree with inherited attributes.
+					</dd>
+					<dt>
+						<b>--encode</b>
+						<i>ENCODING</i>
+					</dt>
+					<dd>
+						Output in the given encoding.
+					</dd>
+					<dt>
+						<b>--format</b>
+					</dt>
+					<dd>
+						Reformat and reindent the output. The
+						<b>XMLLINT_INDENT</b>
+						environment variable controls the indentation. The default value is two spaces " ").
+					</dd>
+					<dt>
+						<b>--help</b>
+
+						<p>
+							Print out a short usage summary for
+							<b>xmllint</b>
+							.
+
+						</p>
+						<p>
+							<b>--html</b>
+
+						</p>
+						<p>
+							Use the HTML parser.
+						</p>
+						<dt>
+							<b>--htmlout</b>
+						</dt>
+					</dt>
+					<dd>
+						Output results as an HTML file. This causes
+						<b>xmllint</b>
+						to output the necessary HTML tags surrounding the result tree output so the results can be
+						displayed/viewed in a browser.
+					</dd>
+					<dt>
+						<b>--insert</b>
+					</dt>
+					<dd>
+						Test for valid insertions.
+					</dd>
+					<dt>
+						<b>--loaddtd</b>
+					</dt>
+					<dd>
+						Fetch an external DTD.
+					</dd>
+					<dt>
+						<b>--load-trace</b>
+					</dt>
+					<dd>
+						Display all the documents loaded during the processing to
+						<i>stderr</i>
+						.
+					</dd>
+					<dt>
+						<b>--maxmem</b>
+						<i>NNBYTES</i>
+					</dt>
+					<dd>
+						Test the parser memory support.
+						<i>NNBYTES</i>
+						is the maximum number of bytes the library is allowed to allocate. This can also be used to make sure batch
+						processing of XML files will not exhaust the virtual memory of the server running them.
+					</dd>
+					<dt>
+						<b>--memory</b>
+					</dt>
+					<dd>
+						Parse from memory.
+					</dd>
+					<dt>
+						<b>--noblanks</b>
+					</dt>
+					<dd>
+						Drop ignorable blank spaces.
+					</dd>
+					<dt>
+						<b>--nocatalogs</b>
+					</dt>
+					<dd>
+						Do not use any catalogs.
+					</dd>
+					<dt>
+						<b>--nocdata</b>
+					</dt>
+					<dd>
+						Substitute CDATA section by equivalent text nodes.
+					</dd>
+					<dt>
+						<b>--noent</b>
+					</dt>
+					<dd>
+						Substitute entity values for entity references. By default,
+						<b>xmllint</b>
+						leaves entity references in place.
+					</dd>
+					<dt>
+						<b>--nonet</b>
+					</dt>
+					<dd>
+						Do not use the Internet to fetch DTDs or entities.
+					</dd>
+					<dt>
+						<b>--noout</b>
+					</dt>
+					<dd>
+						Suppress output. By default,
+						<b>xmllint</b>
+						outputs the result tree.
+					</dd>
+					<dt>
+						<b>--nowarning</b>
+					</dt>
+					<dd>
+						Do not emit warnings from the parser and/or validator.
+					</dd>
+					<dt>
+						<b>--nowrap</b>
+					</dt>
+					<dd>
+						Do not output HTML doc wrapper.
+					</dd>
+					<dt>
+						<b>--noxincludenode</b>
+					</dt>
+					<dd>
+						Do XInclude processing but do not generate XInclude start and end nodes.
+					</dd>
+					<dt>
+						<b>--nsclean</b>
+					</dt>
+					<dd>
+						Remove redundant namespace declarations.
+					</dd>
+					<dt>
+						<b>--output</b>
+						<i>FILE</i>
+					</dt>
+					<dd>
+						Define a file path where
+						<b>xmllint</b>
+						will save the result of parsing. Usually the programs build a tree and save it on
+						<i>stdout</i>
+						, with this option
+						the result XML instance will be saved onto a file.
+					</dd>
+					<dt>
+						<b>--path "</b>
+						<i>
+							<b>PATH</b>
+							(S)
+						</i>
+						<b>"</b>
+					</dt>
+					<dd>
+						Use the (space- or colon-separated) list of filesystem paths specified by
+						<i>PATHS</i>
+						to load DTDs or entities. Enclose space-separated lists by quotation
+						marks.
+					</dd>
+					<dt>
+						<b>--pattern</b>
+						<i>PATTERNVALUE</i>
+					</dt>
+					<dd>
+						Used to exercise the pattern recognition engine, which can be used with the reader interface to the parser. It allows to select some nodes in the document
+						based on an XPath (subset) expression. Used for debugging.
+					</dd>
+					<dt>
+						<b>--postvalid</b>
+					</dt>
+					<dd>
+						Validate after parsing has completed.
+					</dd>
+					<dt>
+						<b>--push</b>
+
+						<p>
+							Use the push mode of the parser.
+						</p>
+						<dt>
+							<b>--recover</b>
+						</dt>
+					</dt>
+					<dd>
+						Output any parsable portions of an invalid document.
+					</dd>
+					<dt>
+						<b>--relaxng</b>
+						<i>SCHEMA</i>
+					</dt>
+					<dd>
+						Use RelaxNG file named
+						<i>SCHEMA</i>
+						for validation.
+					</dd>
+					<dt>
+						<b>--repeat</b>
+					</dt>
+					<dd>
+						Repeat 100 times, for timing or profiling.
+					</dd>
+					<dt>
+						<b>--schema</b>
+						<i>SCHEMA</i>
+					</dt>
+					<dd>
+						Use a W3C XML Schema file named
+						<i>SCHEMA</i>
+						for validation.
+					</dd>
+					<dt>
+						<b>--shell</b>
+					</dt>
+					<dd>
+						Run a navigating shell. Details on available commands in shell mode are below (see the section called "SHELL COMMANDS").
+					</dd>
+					<dt>
+						<b>--stream</b>
+					</dt>
+					<dd>
+						Use streaming API - useful when used in combination with
+						<b>--relaxng</b>
+						or
+						<b>--valid</b>
+						options for validation of files that are too large to be held in
+						memory.
+					</dd>
+					<dt>
+						<b>--testIO</b>
+					</dt>
+					<dd>
+						Test user input/output support.
+					</dd>
+					<dt>
+						<b>--timing</b>
+					</dt>
+					<dd>
+						Output information about the time it takes
+						<b>xmllint</b>
+						to perform the various steps.
+					</dd>
+					<dt>
+						<b>--valid</b>
+					</dt>
+					<dd>
+						Determine if the document is a valid instance of the included Document Type Definition (DTD). A DTD to be validated against also can be specified at the
+						command line using the
+						<b>--dtdvalid</b>
+						option. By default,
+						<b>xmllint</b>
+						also checks to determine if the document is well-formed.
+					</dd>
+					<dt>
+						<b>--version</b>
+					</dt>
+					<dd>
+						Display the version of
+						<b>
+							<a>libxml</a>
+						</b>
+						(3) used.
+					</dd>
+					<dt>
+						<b>--walker</b>
+					</dt>
+					<dd>
+						Test the walker module, which is a reader interface but for a document tree, instead of using the reader API on an unparsed document it works on an existing
+						in-memory tree. Used for debugging.
+					</dd>
+					<dt>
+						<b>--xinclude</b>
+					</dt>
+					<dd>
+						Do XInclude processing.
+					</dd>
+					<dt>
+						<b>--xmlout</b>
+					</dt>
+					<dd>
+						Used in conjunction with
+						<b>--html</b>
+						. Usually when HTML is parsed the document is saved with the HTML serializer. But with this option the resulting
+						document is saved with the XML serializer. This is primarily used to generate XHTML from HTML input.
+					</dd>
+				</dl>
+				<h2>Shell Commands</h2>
+
+				<p>
+					<b>xmllint</b>
+					offers an interactive shell mode invoked with the
+					<b>--shell</b>
+					command. Available commands in shell mode include (in alphabetical
+					order):
+				</p>
+				<dl>
+					<dt>
+						<b>base</b>
+
+						<p>
+							Display XML base of the node.
+
+						</p>
+						<p>
+							<b>bye</b>
+
+						</p>
+						<p>
+							Leave the shell.
+						</p>
+						<dt>
+							<b>cat</b>
+							<i>NODE</i>
+						</dt>
+					</dt>
+					<dd>
+						Display the given node or the current one.
+					</dd>
+					<dt>
+						<b>cd</b>
+						<i>PATH</i>
+					</dt>
+					<dd>
+						Change the current node to the given path (if unique) or root if no argument is given.
+					</dd>
+					<dt>
+						<b>dir</b>
+						<i>PATH</i>
+					</dt>
+					<dd>
+						Dumps information about the node (namespace, attributes, content).
+					</dd>
+					<dt>
+						<b>du</b>
+						<i>PATH</i>
+					</dt>
+					<dd>
+						Show the structure of the subtree under the given path or the current node.
+					</dd>
+					<dt>
+						<b>exit</b>
+
+						<p>
+							Leave the shell.
+
+						</p>
+						<p>
+							<b>help</b>
+
+						</p>
+						<p>
+							Show this help.
+
+						</p>
+						<p>
+							<b>free</b>
+
+						</p>
+						<p>
+							Display memory usage.
+						</p>
+						<dt>
+							<b>load</b>
+							<i>FILENAME</i>
+						</dt>
+					</dt>
+					<dd>
+						Load a new document with the given filename.
+					</dd>
+					<dt>
+						<b>ls</b>
+						<i>PATH</i>
+					</dt>
+					<dd>
+						List contents of the given path or the current directory.
+					</dd>
+					<dt>
+						<b>pwd</b>
+
+						<p>
+							Display the path to the current node.
+
+						</p>
+						<p>
+							<b>quit</b>
+
+						</p>
+						<p>
+							Leave the shell.
+						</p>
+						<dt>
+							<b>save</b>
+							<i>FILENAME</i>
+						</dt>
+					</dt>
+					<dd>
+						Save the current document to the given filename or to the original name.
+					</dd>
+					<dt>
+						<b>validate</b>
+					</dt>
+					<dd>
+						Check the document for errors.
+					</dd>
+					<dt>
+						<b>write</b>
+						<i>FILENAME</i>
+					</dt>
+					<dd>
+						Write the current node to the given filename.
+					</dd>
+				</dl>
+				<h2>Environment</h2>
+
+				<p>
+					<b>SGML_CATALOG_FILES</b>
+				</p>
+				<dl>
+					<dd>
+						SGML catalog behavior can be changed by redirecting queries to the user's own set of catalogs. This can be done by setting the
+						<b>SGML_CATALOG_FILES</b>
+						environment variable to a list of catalogs. An empty one should deactivate loading the default
+						<i>/etc/sgml/catalog</i>
+						catalog.
+					</dd>
+					<dt>
+						<b>XML_CATALOG_FILES</b>
+					</dt>
+					<dd>
+						XML catalog behavior can be changed by redirecting queries to the user's own set of catalogs. This can be done by setting the
+						<b>XML_CATALOG_FILES</b>
+						environment variable to a list of catalogs. An empty one should deactivate loading the default
+						<i>/etc/xml/catalog</i>
+						catalog.
+					</dd>
+					<dt>
+						<b>XML_DEBUG_CATALOG</b>
+					</dt>
+					<dd>
+						Setting the environment variable
+						<b>XML_DEBUG_CATALOG</b>
+						to
+						<i>non-zero</i>
+						using the
+						<b>export</b>
+						command outputs debugging information related to
+						catalog operations.
+					</dd>
+					<dt>
+						<b>XMLLINT_INDENT</b>
+					</dt>
+					<dd>
+						Setting the environment variable
+						<b>XMLLINT_INDENT</b>
+						controls the indentation. The default value is two spaces " ".
+					</dd>
+				</dl>
+				<h2>Diagnostics</h2>
+
+				<p>
+					<b>xmllint</b>
+					return codes provide information that can be used when calling it from scripts.
+				</p>
+				<dl>
+					<dt>
+						<b>0</b>
+
+						<p>
+							No error
+
+						</p>
+						<p>
+							<b>1</b>
+
+						</p>
+						<p>
+							Unclassified
+
+						</p>
+						<p>
+							<b>2</b>
+
+						</p>
+						<p>
+							Error in DTD
+
+						</p>
+						<p>
+							<b>3</b>
+
+						</p>
+						<p>
+							Validation error
+
+						</p>
+						<p>
+							<b>4</b>
+
+						</p>
+						<p>
+							Validation error
+
+						</p>
+						<p>
+							<b>5</b>
+
+						</p>
+						<p>
+							Error in schema compilation
+
+						</p>
+						<p>
+							<b>6</b>
+
+						</p>
+						<p>
+							Error writing output
+
+						</p>
+						<p>
+							<b>7</b>
+
+						</p>
+						<p>
+							Error in pattern (generated when
+							<b>--pattern</b>
+							option is used)
+
+						</p>
+						<p>
+							<b>8</b>
+
+						</p>
+						<p>
+							Error in Reader registration (generated when
+							<b>--chkregister</b>
+							option is used)
+
+						</p>
+						<p>
+							<b>9</b>
+
+						</p>
+						<p>
+							Out of memory error
+						</p>
+					</dt>
+				</dl>
+				<h2>See Also</h2>
+
+				<p>
+					<b>
+						<a>libxml</a>
+					</b>
+					(3)
+				</p>
+				<p>
+					More information can be found at
+				</p>
+				<dl>
+					<dt>
+						&#xC3;&#xA2;&#xE2;&#x82;&#xAC;&#xC2;&#xA2;
+						<b>
+							<a>libxml</a>
+						</b>
+						(3) web page
+						<a>http://www.xmlsoft.org/</a>
+
+						<p>
+							&#xC3;&#xA2;&#xE2;&#x82;&#xAC;&#xC2;&#xA2; W3C XSLT page
+							<a>http://www.w3.org/TR/xslt</a>
+
+						</p>
+					</dt>
+				</dl>
+				<h2>Author</h2>
+
+				<p>
+					John Fleck &lt;
+					<a>jfleck@inkstain.net</a>
+					&gt;, Ziying Sherwin &lt;
+					<a>sherwin@nlm.nih.gov</a>
+					&gt;, Heiko Rupp &lt;
+					<a>hwr@pilhuhn.de</a>
+					&gt;.
+
+					<br/>
+				</p>
+				<h2>Referenced By</h2>
+				<b>
+					<a>a2x</a>
+				</b>
+				(1),
+				<b>
+					<a>checkxml</a>
+				</b>
+				(1),
+				<b>
+					<a>libexslt</a>
+				</b>
+				(3),
+				<b>
+					<a>libxslt</a>
+				</b>
+				(3),
+				<b>
+					<a>xgrep</a>
+				</b>
+				(1)
+				<div>
+					<script/>
+					<ins/>
+					<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+
+			</div>
+			<div>
+				<dl>
+					<dt>Site Search</dt>
+					<dd>
+						<form>
+							<input/>
+							<input/>
+							<input/>
+							<input/>
+							<input/>
+						</form>
+						<script>
+
+						</script>
+					</dd>
+				</dl>
+				<dl>
+					<dt>Library</dt>
+					<dd>
+						<a>linux docs</a>
+					</dd>
+					<dd>
+						<a>linux man pages</a>
+					</dd>
+					<dd>
+						<a>page load time</a>
+					</dd>
+				</dl>
+				<dl>
+					<dt>Toys</dt>
+					<dd>
+						<a>world sunlight</a>
+					</dd>
+					<dd>
+						<a>moon phase</a>
+					</dd>
+					<dd>
+						<a>trace explorer</a>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						<a>
+							<img/>
+						</a>
+					</dt>
+					<dd/>
+				</dl>
+			</div>
+		</div>
+	</body>
+</html>

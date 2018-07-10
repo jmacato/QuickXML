@@ -47,20 +47,18 @@ namespace QuickXML
         }
 
         [DebuggerStepThrough]
-        public class ParserToken
+        public struct ParserToken
         {
             public ParserTokenType type;
-            public int startIndex;
+            public int _startIndex;
             public int endIndex;
-            //public ReadOnlyMemory<char> text;
-
+ 
             [DebuggerStepThrough]
             public ParserToken(ParserTokenType type, int startIndex, int endIndex)
             {
                 this.type = type;
-                this.startIndex = startIndex;
+                this._startIndex = startIndex;
                 this.endIndex = endIndex;
-                // this.text = _xmlspan.Slice(startIndex, (endIndex - startIndex) + 1);
             }
         }
 
@@ -84,12 +82,9 @@ namespace QuickXML
             bool currentlyInTag = false,
                  nextNamesAreAttributes = false,
                  getAttributeName = false,
-                 bool23 = false,
-                 startTextContent = false
-                 ;
+                 startTextContent = false;
 
-            int savedIndex = 0,
-                savedLength = 0;
+            int savedIndex = 0;
 
 
             for (int i = 0; i < _xmlspan.Length; i++)
