@@ -11,6 +11,7 @@ using BenchmarkDotNet.Running;
 
 namespace QuickXML
 {
+    [MemoryDiagnoser]
     public class XmlBench
     {
         private Core core = new Core();
@@ -37,6 +38,7 @@ namespace QuickXML
         }
         [Benchmark]
         public void PlainStringRead() => core.PlainStringRead(ref testxml);
+
         [Benchmark]
         public List<Core.ParserToken> ParseLargeXML() => core.ParseString(ref testxml);
 
@@ -68,7 +70,7 @@ namespace QuickXML
             //         var testxml = reader.ReadToEnd();
             //         XmlDocument xmlDoc = new XmlDocument(); // Create an XML document object
             //         xmlDoc.LoadXml(testxml);
-                    
+
             //     }
             // }
         }

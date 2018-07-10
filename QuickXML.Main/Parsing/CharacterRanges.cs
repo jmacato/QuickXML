@@ -2,15 +2,7 @@ namespace QuickXML
 {
     public static partial class Helpers
     {
-        readonly static (char, char)[] valid_Char_Ranges = new(char, char)[]
-        {
-            ('\x9','\xA'),
-            ('\xD','\xD'),
-            ('\x20','\xD7FF'),
-            ('\xE000','\xFFFD'),        
-            //(0x10000,0x10FFFF),     // Keeping this for reference purposes.
-        };
-
+ 
         readonly static (char, char)[] valid_Whitespace_Ranges = new(char, char)[]
         {
             ('\x9','\xA'),
@@ -20,15 +12,10 @@ namespace QuickXML
 
         readonly static (char, char)[] valid_NameStartChar_Ranges = new(char, char)[]
         {
-            (':',':'),
-            ('A','Z'),
-            ('_', '_'),
-            ('a', 'z'),
             ('\xC0','\xD6'),
             ('\xD8','\xF6'),
             ('\xF8','\x2FF'),
             ('\x370','\x37D'),
-            ('\x37F','\x1FFF'),
             ('\x200C','\x200D'),
             ('\x2070','\x218F'),
             ('\x2C00','\x2FEF'),
@@ -43,10 +30,7 @@ namespace QuickXML
             ('A','Z'),     
             ('0', '9'),
             ('a', 'z'),
-            ('-', '-'),
-            ('.', '.'),
-            ('_', '_'),
-            (':',':'),
+
 
             ('\xB7', '\xB7'),
             ('\x0300', '\x036F'),
