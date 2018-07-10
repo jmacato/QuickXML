@@ -36,8 +36,8 @@ namespace QuickXML
                 }
             }
         }
-        [Benchmark]
-        public void PlainStringRead() => core.PlainStringRead(ref testxml);
+        // [Benchmark]
+        // public void PlainStringRead() => core.PlainStringRead(ref testxml);
 
         [Benchmark]
         public List<Core.ParserToken> ParseLargeXML() => core.ParseString(ref testxml);
