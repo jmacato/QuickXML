@@ -14,7 +14,7 @@ namespace QuickXML
     [MemoryDiagnoser]
     public class XmlBench
     {
-        private Core core = new Core();
+        private Tokenizer core = new Tokenizer();
         XmlDocument xmlDoc = new XmlDocument(); // Create an XML document object
 
         public static string testxml;
@@ -40,34 +40,52 @@ namespace QuickXML
         // public void PlainStringRead() => core.PlainStringRead(ref testxml);
 
         [Benchmark]
-        public List<Core.ParserToken> ParseLargeXML() => core.ParseString(ref testxml);
+        public void TokenizeLargeXML() => core.Tokenize(ref testxml);
 
-        [Benchmark]
-        public void BuiltInXmlDoc() =>
-         xmlDoc.LoadXml(testxml);
+        // [Benchmark]
+        // public void BuiltInXmlDoc() =>
+        //  xmlDoc.LoadXml(testxml);
 
 
     }
 
     class Program
     {
+        class MockTokenObs : IXMLParserReceiver
+        {
 
+            List<(ParserTokenType, string)> TokenSlice = new List<(ParserTokenType, string)>();
+
+            public void OnCompleted()
+            {
+                //throw new NotImplementedException();
+            }
+
+            public void OnError(Exception error)
+            {
+                //throw new NotImplementedException();
+            }
+
+            public void OnNext(ParserToken kx)
+            {
+                TokenSlice.Add((kx.type, XmlBench.testxml.AsSpan().Slice(kx._startIndex, 1 + (kx.endIndex - kx._startIndex)).ToString()));
+
+                //throw new NotImplementedException();
+            }
+        }
         static void Main(string[] args)
         {
 #if !DEBUG
             var summary = BenchmarkRunner.Run<XmlBench>();
 #else
-            var Parser = new XmlBench();
+            var Xml = new XmlBench();
+            Xml.Setup();
 
-            Parser.Setup();
+            var obs = new MockTokenObs();
+            var pipe = new Tokenizer();
 
-            var Tokens = Parser.ParseLargeXML();
-            var TokenSlice = new List<(Core.ParserTokenType, string)>();
-
-            foreach (var kx in Tokens)
-            {
-                TokenSlice.Add((kx.type, XmlBench.testxml.AsSpan().Slice(kx._startIndex, 1 + (kx.endIndex - kx._startIndex)).ToString()));
-            }
+            pipe.Subscribe(obs);
+            pipe.Tokenize(ref XmlBench.testxml);
 #endif
         }
     }

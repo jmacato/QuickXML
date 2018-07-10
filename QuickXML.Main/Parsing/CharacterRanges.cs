@@ -1,53 +1,96 @@
+using System.Diagnostics;
+
 namespace QuickXML
 {
     public static partial class Helpers
     {
- 
-        readonly static (char, char)[] valid_Whitespace_Ranges = new(char, char)[]
+        /// <summary>
+        /// Validates a char against XML spec's valid
+        /// character definition.
+        /// </summary>
+        
+        public static bool IsValidXMLChar(ref char target)
         {
-            ('\x9','\xA'),
-            ('\xD','\xD'),
-            ('\x20', '\x20')
-        };
+            if (target == '\r' || target == '\n' ||
+                (target >= '\x20' & target <= '\xD7FF') ||
+                (target >= '\xE000' || target <= '\xFFFD'))
+                return true;
+            else
+                return false;
+        }
 
-        readonly static (char, char)[] valid_NameStartChar_Ranges = new(char, char)[]
+        /// <summary>
+        /// Validates a char if it's a valid XML whitespace
+        /// </summary>
+        
+        public static bool IsValidWhitespaceXMLChar(ref char target)
         {
-            ('\xC0','\xD6'),
-            ('\xD8','\xF6'),
-            ('\xF8','\x2FF'),
-            ('\x370','\x37D'),
-            ('\x200C','\x200D'),
-            ('\x2070','\x218F'),
-            ('\x2C00','\x2FEF'),
-            ('\x3001','\xD7FF'),
-            ('\xF900','\xFDCF'),
-            ('\xFDF0','\xFFFD')
-            //('\x10000','\xEFFFF') // Keeping this for reference purposes.
-        };
+            if (target == '\r' || target == '\n' || target == '\x20')
+                return true;
+            else
+                return false;
+        }
 
-        readonly static (char, char)[] valid_NameChar_Ranges = new(char, char)[]
+        /// <summary>
+        /// Validates a char if it's a valid Tag Name start character.
+        /// </summary>
+        
+        public static bool IsValidNameStartXMLChar(ref char target)
         {
-            ('A','Z'),     
-            ('0', '9'),
-            ('a', 'z'),
+            if ((target >= 'a' & target <= 'z') ||
+                (target >= 'A' & target <= 'Z') ||
+                (target >= '0' & target <= '9') ||
+                (target >= '\xC0' & target <= '\xD6') ||
+                (target >= '\xD8' & target <= '\xF6') ||
+                (target >= '\xF8' & target <= '\x2FF') ||
+                (target >= '\x370' & target <= '\x37D') ||
+                (target >= '\x37F' & target <= '\x1FFF') ||
+                (target >= '\x200C' & target <= '\x200D') ||
+                (target >= '\x2070' & target <= '\x218F') ||
+                (target >= '\x2C00' & target <= '\x2FEF') ||
+                (target >= '\x3001' & target <= '\xD7FF') ||
+                (target >= '\xF900' & target <= '\xFDCF') ||
+                (target >= '\xFDF0' & target <= '\xFFFD'))
+                return true;
+            else
+                return false;
+        }
 
+        /// <summary>
+        /// Validates a char if it's a valid Tag Name start character.
+        /// </summary>
+        
+        public static bool IsValidNameXMLChar(ref char target)
+        {
+            if ((target >= 'a' & target <= 'z') ||
+                (target >= 'A' & target <= 'Z') ||
+                (target >= '0' & target <= '9') ||
 
-            ('\xB7', '\xB7'),
-            ('\x0300', '\x036F'),
-            ('\x203F', '\x2040'),
+                (target == '.') ||
+                (target == '-') ||
+                (target == '_') ||
+                (target == ':') ||
+                (target == '\xB7') ||
 
-            ('\xC0','\xD6'),
-            ('\xD8','\xF6'),
-            ('\xF8','\x2FF'),
-            ('\x370','\x37D'),
-            ('\x37F','\x1FFF'),
-            ('\x200C','\x200D'),
-            ('\x2070','\x218F'),
-            ('\x2C00','\x2FEF'),
-            ('\x3001','\xD7FF'),
-            ('\xF900','\xFDCF'),
-            ('\xFDF0','\xFFFD')
-            //('\x10000','\xEFFFF') // Keeping this for reference purposes.
-        };
+                (target >= '\xC0' & target <= '\xD6') ||
+                (target >= '\xD8' & target <= '\xF6') ||
+                (target >= '\xF8' & target <= '\x2FF') ||
+
+                (target >= '\x0300' & target <= '\x036F') ||
+                (target >= '\x203F' & target <= '\x2040') ||
+
+                (target >= '\x370' & target <= '\x37D') ||
+                (target >= '\x37F' & target <= '\x1FFF') ||
+                (target >= '\x200C' & target <= '\x200D') ||
+                (target >= '\x2070' & target <= '\x218F') ||
+                (target >= '\x2C00' & target <= '\x2FEF') ||
+                (target >= '\x3001' & target <= '\xD7FF') ||
+                (target >= '\xF900' & target <= '\xFDCF') ||
+                (target >= '\xFDF0' & target <= '\xFFFD'))
+                return true;
+            else
+                return false;
+        }
+
     }
 }
