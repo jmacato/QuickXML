@@ -37,7 +37,7 @@ namespace QuickXML
         /// </summary>
         /// <param name="xmlString"></param>
         /// <returns></returns> 
-        public void Tokenize(ref string xmlspan)
+        public void Tokenize(ref string xmlspan, bool ignoreErrors = false)
         {
             var _xmlspan = xmlspan.AsSpan();
             //List<ParserToken> result = new List<ParserToken>();
@@ -57,8 +57,30 @@ namespace QuickXML
             int savedIndex = 0;
 
 
+
             for (int i = 0; i < _xmlspan.Length; i++)
             {
+                bool SeekAfterError(Exception e)
+                {
+                    if (ignoreErrors)
+                    {
+                        //Reset states and try again.
+                        _stState = ParserState.StartParse;
+
+                        currentlyInTag = false;
+                        nextNamesAreAttributes = false;
+                        getAttributeName = false;
+                        startTextContent = false; 
+
+                        return true;
+                    }
+                    else
+                    {
+                        Receiver?.OnError(e);
+                        return false;
+                    };
+                }
+
                 var target = _xmlspan[i];
 
                 if (!Helpers.IsValidXMLChar(ref target))
@@ -66,6 +88,7 @@ namespace QuickXML
                     Receiver?.OnError(new XmlInvalidCharException($"Invalid XML Character at {_xmlspan.Length}"));
                     return;
                 }
+
 
             loop1:
                 switch (_stState)
@@ -76,12 +99,9 @@ namespace QuickXML
                         {
                             case _TagCharStart:
 
-                                if (!currentlyInTag)
+                                if (!currentlyInTag && textStartIndex < textEndIndex)
                                 {
-                                    if (textStartIndex < textEndIndex)
-                                    {
-                                        PumpToken(new ParserToken(ParserTokenType.TextContent, textStartIndex, textEndIndex));
-                                    }
+                                    PumpToken(new ParserToken(ParserTokenType.TextContent, textStartIndex, textEndIndex));
                                 }
 
                                 _stState = ParserState.CharStartTagName;
@@ -96,11 +116,8 @@ namespace QuickXML
                                     goto loop1;
                                 }
                                 else
-                                {
-
-                                    Receiver?.OnError(new XmlParsingFailedException(xmlspan.AsMemory(), i));
-                                    return;
-                                }
+                                 
+                                 if (SeekAfterError(new XmlParsingFailedException(xmlspan.AsMemory(), i))) continue; else return;
 
                             default:
                                 if (!currentlyInTag)
@@ -134,10 +151,7 @@ namespace QuickXML
                         {
                             // Throw if it's not a valid name start char.
                             if (!Helpers.IsValidNameStartXMLChar(ref target))
-                            {
-                                Receiver?.OnError(new XmlParsingFailedException(xmlspan.AsMemory(), i));
-                                return;
-                            }
+                                if (SeekAfterError(new XmlParsingFailedException(xmlspan.AsMemory(), i))) continue; else return;
 
                         }
 
@@ -165,10 +179,9 @@ namespace QuickXML
                             }
                             else if (getAttributeName)
                             {
-                                PumpToken(new ParserToken(ParserTokenType.AttributeName, nameStartIndex, nameEndIndex));
+                                PumpToken(new ParserToken(ParserTokenType.Attribute, nameStartIndex, nameEndIndex));
                                 getAttributeName = false;
                             }
-
 
                             break;
                         }
@@ -182,7 +195,12 @@ namespace QuickXML
                         else if (target == _TagCharEnd)
                         {
                             _stState = ParserState.CharEndTag;
-                            PumpToken(new ParserToken(ParserTokenType.TagName, nameStartIndex, nameEndIndex));
+
+                            if (nextNamesAreAttributes)
+                                PumpToken(new ParserToken(ParserTokenType.Attribute, nameStartIndex, nameEndIndex));
+                            else
+                                PumpToken(new ParserToken(ParserTokenType.TagName, nameStartIndex, nameEndIndex));
+
                             nextNamesAreAttributes = false;
                             goto loop1;
                         }
@@ -191,17 +209,13 @@ namespace QuickXML
                         {
                             // Throw if it's not a valid name char.
                             if (!Helpers.IsValidNameXMLChar(ref target))
-                            {
-                                Receiver?.OnError(new XmlParsingFailedException(xmlspan.AsMemory(), i));
-                                return;
-                            }
+                                if (SeekAfterError(new XmlParsingFailedException(xmlspan.AsMemory(), i))) continue; else return;
 
                             if (nextNamesAreAttributes && !getAttributeName)
                             {
                                 nameStartIndex = i;
                                 getAttributeName = true;
                             }
-
                         }
 
                         break;
@@ -231,10 +245,8 @@ namespace QuickXML
                         break;
 
                     default:
-                        {
-                            Receiver?.OnError(new XmlParsingFailedException(xmlspan.AsMemory(), i));
-                            return;
-                        }
+
+                        if (SeekAfterError(new XmlParsingFailedException(xmlspan.AsMemory(), i))) continue; else return;
                 }
             }
 

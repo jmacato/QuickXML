@@ -54,30 +54,28 @@ namespace QuickXML
         class MockTokenObs : IXMLParserReceiver
         {
 
-            List<(ParserTokenType, string)> TokenSlice = new List<(ParserTokenType, string)>();
+            List<(ParserTokenType, string, int _startIndex, int endIndex)> TokenSlice = new List<(ParserTokenType, string, int, int)>();
 
             public void OnCompleted()
             {
-                //throw new NotImplementedException();
+                
             }
 
             public void OnError(Exception error)
             {
-                //throw new NotImplementedException();
+                throw error;
             }
 
             public void OnNext(ParserToken kx)
             {
-                TokenSlice.Add((kx.type, XmlBench.testxml.AsSpan().Slice(kx._startIndex, 1 + (kx.endIndex - kx._startIndex)).ToString()));
-
-                //throw new NotImplementedException();
+                TokenSlice.Add((kx.type,
+                 XmlBench.testxml.Substring(kx._startIndex, 1 + (kx.endIndex - kx._startIndex))
+                 ,kx._startIndex, kx.endIndex));
             }
         }
         static void Main(string[] args)
         {
-#if !DEBUG
-            var summary = BenchmarkRunner.Run<XmlBench>();
-#else
+#if DEBUG
             var Xml = new XmlBench();
             Xml.Setup();
 
@@ -86,6 +84,8 @@ namespace QuickXML
 
             pipe.Subscribe(obs);
             pipe.Tokenize(ref XmlBench.testxml);
+#else
+            var summary = BenchmarkRunner.Run<XmlBench>();
 #endif
         }
     }
